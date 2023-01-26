@@ -49,13 +49,26 @@ async def leave(ctx):
 class Music(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
-    
+        self.music_queue = []
+        self.is_playing = False
+
+    async def play_next(self, ctx):
+        while len(self.music_queue > 0):
+            url = self.music_queue[0][0]['source']
+            self.music_queue.pop[0]
+            self.is_playing = True
+            Music.play(ctx, url)
+
     @commands.command(name = 'play')
     async def play(self, ctx, url):
-        
+        voice_channel = ctx.author.voice.channel
+
+        if self.is_playing == True:
+            await ctx.send('Added to queue')
+            self.music_queue.append([url, voice_channel])
         async with ctx.typing():
             player = await YTDLSource.from_url(url, loop=self.bot.loop, stream=True)
-            ctx.voice_client.play(player, after=lambda e: print(f'Player error: {e}') if e else None)
+            ctx.voice_client.play(player, after=lambda e: self.play_next())
 
         await ctx.send(f'Now playing: {player.title}')  
 
