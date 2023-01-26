@@ -6,6 +6,9 @@ import asyncio
 intents = discord.Intents.default()
 intents.message_content = True
 client = discord.Client(intents=intents)
+with open('key.txt', 'r') as read:
+    api_key = read.readline()
+    read.close()
 
 bot = commands.Bot(
     command_prefix=commands.when_mentioned_or("!"),
@@ -92,4 +95,4 @@ class YTDLSource(discord.PCMVolumeTransformer):
         return cls(discord.FFmpegPCMAudio(filename, **ffmpeg_options), data=data)
 
 bot.add_cog(Music(bot))
-bot.run('MTAzMDUwNzg4NDU4NjQ3MTQzNg.G6TaNQ.wwSGRrgP8oeRLWW7dZ1qEKiNM40MFjuB4viHgY')
+bot.run(api_key)
